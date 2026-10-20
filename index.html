@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TEKS HOUSE Netflix &amp; Chill - Buku Kas Sewa Apartemen</title>
+  <!-- Tailwind CSS CDN with forms and container queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#e11d48',
+              600: '#be123c',
+              700: '#9f1239',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Font Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e11d48">
+</head>
+<body class="bg-slate-50 dark:bg-[#0b0f19] text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col pb-20 md:pb-12 transition-colors">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white dark:bg-slate-900/90 dark:backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-rose-700 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-rose-500/20">
+          🎬
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight">
+              TEKS HOUSE <span class="text-rose-600 dark:text-rose-400 font-serif italic text-sm sm:text-base font-normal">Netflix &amp; Chill</span>
+            </h1>
+            <span class="text-[10px] bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 font-bold px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-800">Serang Kota</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Buku Kas &amp; Keuangan Sewa Apartemen Per Jam</p>
+        </div>
+      </div>
+
+      <!-- Cloud Sync & Status Info + Dark Mode Toggle -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Cloud Sync Badge -->
+        <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700 shadow-2xs">
+          <span id="cloudSyncStatusBadge" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+          <span id="cloudSyncStatusText" class="hidden sm:inline">Penyimpanan Lokal (Offline)</span>
+        </div>
+
+        <!-- Dark Mode Toggle Button -->
+        <button id="themeToggleBtn" onclick="toggleTheme()" type="button" title="Ganti Mode Terang / Gelap" class="inline-flex items-center space-x-2 px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-amber-300 border border-slate-200 dark:border-slate-700 transition shadow-2xs">
+          <span id="themeIcon" class="text-sm">☀️</span>
+          <span id="themeText" class="hidden sm:inline">Light Mode</span>
+        </button>
+
+        <button onclick="switchTab('tab-pengaturan')" class="hidden md:inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-transparent dark:border-slate-700 transition">
+          <span>⚙️</span>
+          <span>Pengaturan</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- DESKTOP NAVIGATION TABS -->
+    <div class="border-t border-slate-100 dark:border-slate-800/80 hidden md:block">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex space-x-2 py-1.5 overflow-x-auto">
+        <button data-tab="tab-rekap" class="nav-tab-btn px-4 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition flex items-center space-x-2 shadow-sm shadow-blue-600/30">
+          <span>📊</span>
+          <span>Rekap Keuangan</span>
+        </button>
+        <button data-tab="tab-pemasukan" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-2">
+          <span>➕</span>
+          <span>Catat Customer &amp; Pemasukan</span>
+        </button>
+        <button data-tab="tab-pengeluaran" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-2">
+          <span>💸</span>
+          <span>Catat Pengeluaran</span>
+        </button>
+        <button data-tab="tab-pengaturan" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-2">
+          <span>📋</span>
+          <span>Pricelist &amp; Cloud</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-6">
+
+    <!-- ==================== TAB 1: REKAP KEUNGAN & CUSTOMER ==================== -->
+    <section id="tab-rekap" class="space-y-6">
+      <!-- FILTER PERIODE BAR -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-xs border border-slate-200/90 dark:border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Periode Rekapitulasi</div>
+            <h2 id="recapPeriodTitle" class="text-xl font-extrabold text-slate-900 dark:text-white mt-0.5">Memuat Data...</h2>
+          </div>
+
+          <!-- Pilihan Filter -->
+          <div class="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+            <button data-filter="daily" class="filter-type-btn px-3.5 py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white shadow-xs transition">
+              📅 Harian
+            </button>
+            <button data-filter="weekly" class="filter-type-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition">
+              📅 7 Hari
+            </button>
+            <button data-filter="monthly" class="filter-type-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition">
+              📅 Bulanan
+            </button>
+            <button data-filter="custom" class="filter-type-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition">
+              📅 Kustom
+            </button>
+          </div>
+        </div>
+
+        <!-- Controls & Export Actions -->
+        <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <!-- Control Harian -->
+          <div id="filterControlDaily" class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Pilih Tanggal:</span>
+            <input type="date" id="filterDailyDate" class="px-3 py-1.5 text-xs font-semibold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+              ● Live Data Terkini
+            </span>
+          </div>
+
+          <!-- Control Mingguan -->
+          <div id="filterControlWeekly" class="hidden text-xs text-slate-500 dark:text-slate-400 font-medium">
+            ℹ️ Menampilkan rekap transaksi 7 hari terakhir hingga hari ini.
+          </div>
+
+          <!-- Control Bulanan -->
+          <div id="filterControlMonthly" class="hidden flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Pilih Bulan:</span>
+            <input type="month" id="filterMonth" class="px-3 py-1.5 text-xs font-semibold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+
+          <!-- Control Custom -->
+          <div id="filterControlCustom" class="hidden flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Dari:</span>
+            <input type="date" id="filterCustomStart" class="px-2.5 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 focus:ring-1 focus:ring-blue-500">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Sampai:</span>
+            <input type="date" id="filterCustomEnd" class="px-2.5 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 focus:ring-1 focus:ring-blue-500">
+          </div>
+
+          <!-- Tombol Ekspor & Cetak -->
+          <div class="flex items-center space-x-2 ml-auto">
+            <button onclick="exportToExcelCSV()" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800/80 transition flex items-center space-x-1.5">
+              <span>📥</span>
+              <span>Export Excel (CSV)</span>
+            </button>
+            <button onclick="printReport()" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition flex items-center space-x-1.5">
+              <span>🖨️</span>
+              <span>Cetak / PDF</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 KARTU STATISTIK UTAMA (KPI) -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- 1. Customer Masuk -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Customer Masuk</span>
+            <span class="text-lg p-2 rounded-xl bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 font-bold">👥</span>
+          </div>
+          <div id="statTotalCustomers" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">0 Orang</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center space-x-1">
+            <span>⏱️ Total Waktu:</span>
+            <span id="statTotalHours" class="font-bold text-slate-700 dark:text-slate-200">0 Jam</span>
+          </div>
+        </div>
+
+        <!-- 2. Total Pemasukan -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-emerald-200 dark:border-emerald-800/80 shadow-xs relative overflow-hidden bg-gradient-to-br from-white dark:from-slate-900 to-emerald-50 dark:to-emerald-950/40">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Total Pemasukan</span>
+            <span class="text-lg p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold">💰</span>
+          </div>
+          <div id="statTotalIncome" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2">Rp 0</div>
+          <div class="text-[11px] text-emerald-700 dark:text-emerald-400 mt-1 truncate font-medium">
+            Sesuai tarif pricelist resmi
+          </div>
+        </div>
+
+        <!-- 3. Total Pengeluaran -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-rose-200 dark:border-rose-900/70 shadow-xs relative overflow-hidden bg-gradient-to-br from-white dark:from-slate-900 to-rose-50/50 dark:to-rose-950/30">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-700 dark:text-rose-400">Total Pengeluaran</span>
+            <span class="text-lg p-2 rounded-xl bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-400 font-bold">📉</span>
+          </div>
+          <div id="statTotalExpense" class="text-3xl font-extrabold text-rose-600 dark:text-rose-400 mt-2">Rp 0</div>
+          <div class="text-[11px] text-rose-700 dark:text-rose-400 mt-1 truncate">
+            Biaya operasional &amp; unit
+          </div>
+        </div>
+
+        <!-- 4. Laba Bersih (Net Profit) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-blue-200 dark:border-blue-900/60 shadow-xs relative overflow-hidden bg-gradient-to-br from-white dark:from-slate-900 to-blue-50 dark:to-blue-950/60">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Laba Bersih</span>
+            <span class="text-lg p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">📈</span>
+          </div>
+          <div id="statNetProfit" class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 mt-2">Rp 0</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+            Pemasukan dikurangi Pengeluaran
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 KARTU BREAKDOWN PER UNIT -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Unit B-24 (VIP) -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/60 shadow-xs flex items-center justify-between">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-slate-900 dark:text-white text-sm">Unit B-24</span>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">VIP</span>
+            </div>
+            <p id="breakdownB24" class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
+          </div>
+        </div>
+
+        <!-- Unit B-32 (REGULER) -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-sky-200 dark:border-sky-900/60 shadow-xs flex items-center justify-between">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-slate-900 dark:text-white text-sm">Unit B-32</span>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 border border-sky-300 dark:border-sky-800">REGULER</span>
+            </div>
+            <p id="breakdownB32" class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
+          </div>
+        </div>
+
+        <!-- Unit C-34 (REGULER) -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-indigo-200 dark:border-indigo-900/60 shadow-xs flex items-center justify-between">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-slate-900 dark:text-white text-sm">Unit C-34</span>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-800">REGULER</span>
+            </div>
+            <p id="breakdownC34" class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABEL 1: DATA CUSTOMER & PEMASUKAN -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Data Customer Masuk &amp; Pemasukan</h3>
+            <span class="text-[10px] bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-200 dark:border-emerald-800">Uang Masuk</span>
+          </div>
+          <button onclick="switchTab('tab-pemasukan')" class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-1">
+            <span>+ Catat Baru</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider border-b border-slate-200 dark:border-slate-800">
+                <th class="py-3 px-4">No</th>
+                <th class="py-3 px-4">Waktu Masuk</th>
+                <th class="py-3 px-4">Unit</th>
+                <th class="py-3 px-4">Paket / Durasi</th>
+                <th class="py-3 px-4">Total Pemasukan</th>
+                <th class="py-3 px-4">Metode Bayar</th>
+                <th class="py-3 px-4">Catatan</th>
+                <th class="py-3 px-4 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableIncomesBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="emptyIncomesState" class="hidden py-10 text-center text-slate-400 dark:text-slate-500">
+          <div class="text-3xl mb-2">📭</div>
+          <p class="text-sm font-medium">Belum ada transaksi customer pada periode ini</p>
+        </div>
+      </div>
+
+      <!-- TABEL 2: DATA PENGELUARAN -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Data Pengeluaran Operasional</h3>
+            <span class="text-[10px] bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-200 dark:border-rose-900">Uang Keluar</span>
+          </div>
+          <button onclick="switchTab('tab-pengeluaran')" class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-1">
+            <span>+ Catat Pengeluaran</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider border-b border-slate-200 dark:border-slate-800">
+                <th class="py-3 px-4">No</th>
+                <th class="py-3 px-4">Tanggal</th>
+                <th class="py-3 px-4">Kategori</th>
+                <th class="py-3 px-4">Unit</th>
+                <th class="py-3 px-4">Nominal</th>
+                <th class="py-3 px-4">Catatan</th>
+                <th class="py-3 px-4 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableExpensesBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="emptyExpensesState" class="hidden py-10 text-center text-slate-400 dark:text-slate-500">
+          <div class="text-3xl mb-2">🍃</div>
+          <p class="text-sm font-medium">Belum ada catatan pengeluaran pada periode ini</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: CATAT CUSTOMER & PEMASUKAN ==================== -->
+    <section id="tab-pemasukan" class="hidden max-w-2xl mx-auto">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7 shadow-xs border border-rose-200 dark:border-rose-900/60">
+        <div class="flex items-center space-x-3 mb-5 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl font-bold">
+            ➕
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Catat Customer Masuk &amp; Pemasukan</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Pilih unit dan paket sewa resmi TEKS HOUSE (tanpa perlu nama tamu)</p>
+          </div>
+        </div>
+
+        <form id="formIncome" class="space-y-4">
+          <!-- Tanggal & Jam Masuk -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="incomeDateTime" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase">Tanggal &amp; Waktu Masuk</label>
+              <span id="incomeDayBadge" class="text-[11px] px-2 py-0.5 rounded font-bold bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
+                WEEKDAY (Senin - Kamis)
+              </span>
+            </div>
+            <input type="datetime-local" id="incomeDateTime" required class="w-full px-3 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium text-slate-800 dark:text-slate-100">
+          </div>
+
+          <!-- Kategori Hari (Auto-detected + Manual Override) -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Kategori Hari Sewa</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" id="btnDayWeekday" onclick="setManualDayType('weekday')" class="px-3 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white shadow-xs transition text-center">
+                🗓️ Weekday (Senin - Kamis)
+              </button>
+              <button type="button" id="btnDayWeekend" onclick="setManualDayType('weekend')" class="px-3 py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition text-center">
+                🎉 Weekend (Jumat - Minggu)
+              </button>
+            </div>
+          </div>
+
+          <!-- Pilihan Unit Apartemen -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="incomeUnit" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase">Pilih Unit Apartemen</label>
+              <span id="incomeUnitTypeBadge" class="text-xs px-2 py-0.5 rounded font-semibold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">VIP</span>
+            </div>
+            <select id="incomeUnit" class="w-full px-3 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none font-semibold text-slate-900 dark:text-white">
+              <option value="B-24" class="dark:bg-slate-800">Unit B-24 (VIP) - Netflix &amp; Smart TV 4K</option>
+              <option value="B-32" class="dark:bg-slate-800">Unit B-32 (REGULER)</option>
+              <option value="C-34" class="dark:bg-slate-800">Unit C-34 (REGULER)</option>
+            </select>
+          </div>
+
+          <!-- Pilihan Paket Durasi Sewa TEKS HOUSE -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Pilih Paket Durasi Sewa</label>
+            
+            <div class="grid grid-cols-4 gap-1.5 mb-2">
+              <button type="button" data-pkg="1" onclick="setPackageSelection('1')" class="pkg-btn py-2 px-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition">1 Jam</button>
+              <button type="button" data-pkg="2" onclick="setPackageSelection('2')" class="pkg-btn py-2 px-2 text-xs font-extrabold rounded-xl bg-blue-600 text-white shadow-sm border border-blue-600 transition">2 Jam</button>
+              <button type="button" data-pkg="3" onclick="setPackageSelection('3')" class="pkg-btn py-2 px-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition">3 Jam</button>
+              <button type="button" data-pkg="4" onclick="setPackageSelection('4')" class="pkg-btn py-2 px-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition">4 Jam</button>
+              <button type="button" data-pkg="5" onclick="setPackageSelection('5')" class="pkg-btn py-2 px-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition">5 Jam</button>
+              <button type="button" data-pkg="6" onclick="setPackageSelection('6')" class="pkg-btn py-2 px-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition">6 Jam</button>
+              <button type="button" data-pkg="12" onclick="setPackageSelection('12')" class="pkg-btn py-2 px-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition">12 Jam</button>
+              <button type="button" data-pkg="malam" onclick="setPackageSelection('malam')" class="pkg-btn py-2 px-2 text-xs font-extrabold rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 hover:bg-amber-100 border border-amber-300 dark:border-amber-800 transition">🌙 Malam</button>
+            </div>
+
+            <div class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
+              <span>Atau jam custom:</span>
+              <input type="number" id="incomeCustomHours" min="1" step="0.5" value="2" class="w-20 px-2 py-1 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg font-bold text-slate-800 dark:text-slate-100">
+              <span>Jam</span>
+            </div>
+          </div>
+
+          <!-- Tarif Pemasukan (Otomatis dari Pricelist) -->
+          <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <label for="incomeRent" class="text-xs font-bold text-slate-700 dark:text-slate-300">Nominal Tarif Sewa (Rp)</label>
+                <div id="incomePackageNotes" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Tarif resmi TEKS HOUSE</div>
+              </div>
+              <input type="number" id="incomeRent" min="0" required class="w-36 px-3 py-1.5 text-sm font-extrabold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-emerald-600 dark:text-emerald-400 text-right focus:ring-2 focus:ring-emerald-500">
+            </div>
+
+            <!-- Total Banner -->
+            <div class="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-800 dark:text-white">Total Pemasukan Diterima:</span>
+              <span id="incomeTotalDisplay" class="text-2xl font-black text-emerald-600 dark:text-emerald-400">Rp 0</span>
+            </div>
+          </div>
+
+          <!-- Metode Pembayaran -->
+          <div>
+            <label for="incomePaymentMethod" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Metode Pembayaran</label>
+            <select id="incomePaymentMethod" class="w-full px-3 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium text-slate-800 dark:text-slate-100">
+              <option value="Tunai (Cash)" class="dark:bg-slate-800">Tunai (Cash)</option>
+              <option value="Transfer BCA" class="dark:bg-slate-800">Transfer BCA</option>
+              <option value="Transfer Mandiri" class="dark:bg-slate-800">Transfer Mandiri</option>
+              <option value="Transfer BRI" class="dark:bg-slate-800">Transfer BRI</option>
+              <option value="QRIS" class="dark:bg-slate-800">QRIS</option>
+              <option value="E-Wallet (GoPay/OVO/Dana)" class="dark:bg-slate-800">E-Wallet (GoPay/OVO/Dana)</option>
+            </select>
+          </div>
+
+          <!-- Catatan Tambahan -->
+          <div>
+            <label for="incomeNotes" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Catatan Tambahan (Opsional)</label>
+            <input type="text" id="incomeNotes" placeholder="Catatan singkat jika ada..." class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500">
+          </div>
+
+          <!-- Tombol Simpan -->
+          <div class="pt-2">
+            <button type="submit" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-extrabold text-sm sm:text-base shadow-md shadow-rose-500/20 transition flex items-center justify-center space-x-2">
+              <span>💾</span>
+              <span>Simpan Pemasukan Customer</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: CATAT PENGELUARAN ==================== -->
+    <section id="tab-pengeluaran" class="hidden max-w-2xl mx-auto">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7 shadow-xs border border-rose-200 dark:border-rose-900/60">
+        <div class="flex items-center space-x-3 mb-5 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl font-bold">
+            💸
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Catat Pengeluaran Operasional</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Biaya listrik, laundry, perlengkapan, dan kebersihan</p>
+          </div>
+        </div>
+
+        <form id="formExpense" class="space-y-4">
+          <!-- Tanggal Pengeluaran -->
+          <div>
+            <label for="expenseDate" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Tanggal Pengeluaran</label>
+            <input type="date" id="expenseDate" required class="w-full px-3 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium text-slate-800 dark:text-slate-100">
+          </div>
+
+          <!-- Kategori Pengeluaran -->
+          <div>
+            <label for="expenseCategory" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Kategori Pengeluaran</label>
+            <select id="expenseCategory" class="w-full px-3 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium text-slate-800 dark:text-slate-100">
+              <option value="Token Listrik PLN" class="dark:bg-slate-800">⚡ Token Listrik PLN</option>
+              <option value="Laundry Sprei/Handuk" class="dark:bg-slate-800">🧺 Laundry Sprei &amp; Handuk</option>
+              <option value="Perlengkapan/Amenities" class="dark:bg-slate-800">🧼 Perlengkapan (Sabun, Sampo, Tisu)</option>
+              <option value="Kebersihan/Cleaning" class="dark:bg-slate-800">🧹 Kebersihan &amp; Desinfektan</option>
+              <option value="Langganan Netflix &amp; WiFi" class="dark:bg-slate-800">📶 Langganan Netflix &amp; Tagihan WiFi</option>
+              <option value="IPL &amp; Service Charge" class="dark:bg-slate-800">🏢 IPL &amp; Service Charge Gedung</option>
+              <option value="Maintenance/Perbaikan" class="dark:bg-slate-800">🔧 Maintenance &amp; Perbaikan Unit</option>
+              <option value="Lain-lain" class="dark:bg-slate-800">📦 Lain-lain</option>
+            </select>
+          </div>
+
+          <!-- Unit Terkait -->
+          <div>
+            <label for="expenseUnit" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Unit Terkait</label>
+            <select id="expenseUnit" class="w-full px-3 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium text-slate-800 dark:text-slate-100">
+              <option value="Umum" class="dark:bg-slate-800">Umum / Semua Unit</option>
+              <option value="B-24" class="dark:bg-slate-800">Unit B-24 (VIP)</option>
+              <option value="B-32" class="dark:bg-slate-800">Unit B-32 (REGULER)</option>
+              <option value="C-34" class="dark:bg-slate-800">Unit C-34 (REGULER)</option>
+            </select>
+          </div>
+
+          <!-- Nominal Pengeluaran -->
+          <div>
+            <label for="expenseAmount" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Nominal Biaya (Rp)</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-bold">Rp</span>
+              <input type="number" id="expenseAmount" min="1000" step="500" required placeholder="Contoh: 100000" class="w-full pl-10 pr-3 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none font-bold text-rose-600 dark:text-rose-400">
+            </div>
+          </div>
+
+          <!-- Catatan Pengeluaran -->
+          <div>
+            <label for="expenseNotes" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Keterangan / Catatan</label>
+            <input type="text" id="expenseNotes" placeholder="Contoh: Beli token PLN 100rb di Tokopedia" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-rose-500 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500">
+          </div>
+
+          <!-- Tombol Simpan -->
+          <div class="pt-2">
+            <button type="submit" class="w-full py-3.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-sm sm:text-base shadow-md shadow-rose-500/20 transition flex items-center justify-center space-x-2">
+              <span>💾</span>
+              <span>Simpan Pengeluaran</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: PRICELIST RESMI & CLOUD SYNC ==================== -->
+    <section id="tab-pengaturan" class="hidden max-w-2xl mx-auto space-y-6">
+      <!-- Tabel Pricelist Resmi TEKS HOUSE -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7 shadow-xs border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">📋 Pricelist Resmi TEKS HOUSE</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Daftar paket sewa reguler &amp; VIP per jam (Serang Kota)</p>
+          </div>
+          <a href="screenshots/pricelist_teks_house.jpg" target="_blank" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 transition">
+            Lihat Brosur ↗
+          </a>
+        </div>
+
+        <!-- Tabel Perbandingan Pricelist -->
+        <div class="overflow-x-auto mt-3">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase font-bold border-b border-slate-200 dark:border-slate-700">
+                <th class="py-2.5 px-3">Durasi</th>
+                <th class="py-2.5 px-3 text-sky-700 dark:text-sky-400">Reguler (Weekday)</th>
+                <th class="py-2.5 px-3 text-sky-700 dark:text-sky-400">Reguler (Weekend)</th>
+                <th class="py-2.5 px-3 text-amber-700 dark:text-amber-400">VIP (Weekday)</th>
+                <th class="py-2.5 px-3 text-amber-700 dark:text-amber-400">VIP (Weekend)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <tr>
+                <td class="py-2 px-3 font-bold text-slate-800 dark:text-slate-200">1 Jam</td>
+                <td class="py-2 px-3">Rp 50.000</td>
+                <td class="py-2 px-3">Rp 60.000</td>
+                <td class="py-2 px-3">Rp 60.000</td>
+                <td class="py-2 px-3">Rp 70.000</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-bold text-slate-800 dark:text-slate-200">2 Jam</td>
+                <td class="py-2 px-3">Rp 70.000</td>
+                <td class="py-2 px-3">Rp 80.000</td>
+                <td class="py-2 px-3">Rp 80.000</td>
+                <td class="py-2 px-3">Rp 100.000</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-bold text-slate-800 dark:text-slate-200">3 Jam</td>
+                <td class="py-2 px-3">Rp 90.000</td>
+                <td class="py-2 px-3">Rp 100.000</td>
+                <td class="py-2 px-3">Rp 100.000</td>
+                <td class="py-2 px-3">Rp 130.000</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-bold text-slate-800 dark:text-slate-200">4 Jam</td>
+                <td class="py-2 px-3">Rp 110.000</td>
+                <td class="py-2 px-3">Rp 120.000</td>
+                <td class="py-2 px-3">Rp 120.000</td>
+                <td class="py-2 px-3">Rp 150.000</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-bold text-slate-800 dark:text-slate-200">5 Jam</td>
+                <td class="py-2 px-3">Rp 130.000</td>
+                <td class="py-2 px-3">Rp 150.000</td>
+                <td class="py-2 px-3">Rp 150.000</td>
+                <td class="py-2 px-3">Rp 180.000</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-bold text-slate-800 dark:text-slate-200">6 Jam</td>
+                <td class="py-2 px-3">Rp 150.000</td>
+                <td class="py-2 px-3">Rp 170.000</td>
+                <td class="py-2 px-3">Rp 180.000</td>
+                <td class="py-2 px-3">Rp 210.000</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-bold text-slate-800 dark:text-slate-200">12 Jam</td>
+                <td class="py-2 px-3">Rp 200.000</td>
+                <td class="py-2 px-3">Rp 220.000</td>
+                <td class="py-2 px-3">Rp 300.000</td>
+                <td class="py-2 px-3">Rp 330.000</td>
+              </tr>
+              <tr class="bg-amber-50/50 dark:bg-amber-950/20 font-bold">
+                <td class="py-2 px-3 text-amber-800 dark:text-amber-300">🌙 Paket Malam</td>
+                <td class="py-2 px-3 text-amber-800 dark:text-amber-300">Rp 150.000</td>
+                <td class="py-2 px-3 text-amber-800 dark:text-amber-300">Rp 150.000</td>
+                <td class="py-2 px-3 text-amber-800 dark:text-amber-300">Rp 180.000</td>
+                <td class="py-2 px-3 text-amber-800 dark:text-amber-300">Rp 180.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sinkronisasi Cloud (Firebase) -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7 shadow-xs border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-bold text-slate-900 dark:text-white">☁️ Sinkronisasi Cloud (Multi-HP)</h2>
+          <span class="text-xs px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 font-semibold border border-blue-200 dark:border-blue-800">Firebase Firestore</span>
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
+          Hubungkan ke akun Firebase (gratis) agar data keuangan otomatis tersinkronisasi secara real-time ke HP abang Anda maupun staf pengelola.
+        </p>
+
+        <div class="space-y-3">
+          <div>
+            <label for="firebaseConfigJson" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Firebase Config JSON / JS Snippet</label>
+            <textarea id="firebaseConfigJson" rows="5" placeholder='{\n  "apiKey": "AIzaSy...",\n  "projectId": "sewa-apartemen...",\n  ...\n}' class="w-full p-2.5 text-xs font-mono bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-slate-100"></textarea>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <button onclick="handleSaveFirebaseConfig()" class="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition">
+              Simpan &amp; Sambungkan Cloud
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">
+            *Jika dikosongkan, aplikasi akan berjalan 100% menggunakan memori lokal perangkat (Offline Mode).
+          </p>
+        </div>
+      </div>
+
+      <!-- Backup & Reset Data -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7 shadow-xs border border-slate-200 dark:border-slate-800">
+        <h2 class="text-base font-bold text-slate-900 dark:text-white mb-1">📦 Cadangan &amp; Riwayat Data</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Unduh salinan data keuangan atau muat data demo</p>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="exportToExcelCSV()" class="px-3 py-2 text-xs font-bold rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition">
+            📥 Unduh Rekap Excel (CSV)
+          </button>
+          <button onclick="loadInitialDemoData(); renderAll(); showToast('Data demo berhasil dimuat ulang!');" class="px-3 py-2 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+            🔄 Muat Contoh Data Demo
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MOBILE BOTTOM NAVIGATION (Khusus HP / Layar Kecil) -->
+  <nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-1.5 px-2 z-40 flex items-center justify-around shadow-lg">
+    <button data-tab="tab-rekap" class="mobile-nav-btn flex flex-col items-center p-1 text-blue-600 dark:text-blue-400 transition">
+      <span class="text-lg">📊</span>
+      <span class="text-[10px] font-bold mt-0.5">Rekap</span>
+    </button>
+    <button data-tab="tab-pemasukan" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 dark:text-slate-500 transition">
+      <span class="text-lg">➕</span>
+      <span class="text-[10px] font-bold mt-0.5">Pemasukan</span>
+    </button>
+    <button data-tab="tab-pengeluaran" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 dark:text-slate-500 transition">
+      <span class="text-lg">💸</span>
+      <span class="text-[10px] font-bold mt-0.5">Pengeluaran</span>
+    </button>
+    <button type="button" onclick="toggleTheme()" class="flex flex-col items-center p-1 text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition">
+      <span id="mobileThemeIcon" class="text-lg">☀️</span>
+      <span class="text-[10px] font-bold mt-0.5">Tema</span>
+    </button>
+    <button data-tab="tab-pengaturan" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 dark:text-slate-500 transition">
+      <span class="text-lg">📋</span>
+      <span class="text-[10px] font-bold mt-0.5">Pricelist</span>
+    </button>
+  </nav>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-16 md:bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <!-- SCRIPT UTAMA -->
+  <script src="js/firebase-sync.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
