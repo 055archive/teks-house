@@ -331,6 +331,8 @@ function switchTab(tabId) {
 
   if (tabId === 'tab-rekap') {
     renderRecap();
+  } else if (tabId === 'tab-pengaturan') {
+    renderSettingsValues();
   }
 }
 

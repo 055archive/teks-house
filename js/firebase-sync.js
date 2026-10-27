@@ -1,25 +1,34 @@
 /**
  * Firebase Firestore Synchronization Module
- * Mendukung sinkronisasi cloud real-time antar perangkat HP/Laptop
- * dengan fallback otomatis ke LocalStorage jika offline atau belum diatur.
+ * TEKS HOUSE Netflix & Chill - Sewa Apartemen Per Jam
+ * Menggunakan Firebase Compat SDK yang 100% kompatibel dengan file://, HTTP, dan HTTPS
  */
 
-// State konfigurasi Firebase
-let firebaseApp = null;
+// Konfigurasi Resmi Firebase Project "teks-house"
+const DEFAULT_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAW1PNK1Vs_4w02xYNVFfTuDBJN_rbCHa4",
+  authDomain: "teks-house.firebaseapp.com",
+  projectId: "teks-house",
+  storageBucket: "teks-house.firebasestorage.app",
+  messagingSenderId: "416910541898",
+  appId: "1:416910541898:web:a70407dccfddeae14212b3",
+  measurementId: "G-MFQFFKCSR0"
+};
+
 let firestoreDb = null;
 let isCloudSyncActive = false;
 let unsubscribers = [];
 
 const FIREBASE_CONFIG_KEY = 'sewa_apartemen_firebase_config';
 
-// Mengambil konfigurasi tersimpan
+// Mengambil konfigurasi tersimpan atau default
 function getSavedFirebaseConfig() {
   try {
     const raw = localStorage.getItem(FIREBASE_CONFIG_KEY);
-    return raw ? JSON.parse(raw) : null;
+    return raw ? JSON.parse(raw) : DEFAULT_FIREBASE_CONFIG;
   } catch (e) {
     console.error("Gagal membaca firebase config:", e);
-    return null;
+    return DEFAULT_FIREBASE_CONFIG;
   }
 }
 
@@ -35,7 +44,7 @@ function saveFirebaseConfig(configObj) {
 }
 
 // Inisialisasi Firebase
-async function initFirebaseSync(onDataChangedCallback) {
+function initFirebaseSync(onDataChangedCallback) {
   const config = getSavedFirebaseConfig();
   const statusBadge = document.getElementById('cloudSyncStatusBadge');
   const statusText = document.getElementById('cloudSyncStatusText');
@@ -46,60 +55,43 @@ async function initFirebaseSync(onDataChangedCallback) {
   }
 
   try {
-    // Memuat Firebase via modular CDN jika belum ada
-    if (!window.firebaseModular) {
-      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js');
-      const { 
-        getFirestore, 
-        collection, 
-        onSnapshot, 
-        doc, 
-        setDoc, 
-        deleteDoc, 
-        getDocs,
-        query,
-        orderBy
-      } = await import('https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js');
-      
-      window.firebaseModular = {
-        initializeApp,
-        getFirestore,
-        collection,
-        onSnapshot,
-        doc,
-        setDoc,
-        deleteDoc,
-        getDocs,
-        query,
-        orderBy
-      };
+    if (!window.firebase) {
+      console.warn("Pustaka Firebase SDK belum dimuat di browser.");
+      updateCloudStatusUI('local', 'Penyimpanan Lokal (Offline)');
+      return false;
     }
 
-    const { initializeApp, getFirestore, collection, onSnapshot, doc, setDoc } = window.firebaseModular;
+    // Inisialisasi Firebase app
+    if (!firebase.apps.length) {
+      firebase.initializeApp(config);
+    }
 
-    firebaseApp = initializeApp(config, 'sewa-apartemen-app');
-    firestoreDb = getFirestore(firebaseApp);
+    firestoreDb = firebase.firestore();
     isCloudSyncActive = true;
 
-    updateCloudStatusUI('cloud', 'Tersambung Cloud (Firebase)');
+    updateCloudStatusUI('cloud', 'Tersambung Cloud (teks-house)');
+    console.log("Firebase Firestore berhasil terhubung ke project:", config.projectId);
 
-    // Listen real-time ke koleksi rentals & expenses
-    listenToCloudCollection('rentals', (items) => {
-      if (onDataChangedCallback) onDataChangedCallback('rentals', items);
+    // Listen real-time ke koleksi incomes
+    listenToCloudCollection('incomes', (items) => {
+      console.log(`Cloud update: ${items.length} transaksi pemasukan diterima.`);
+      if (onDataChangedCallback) {
+        onDataChangedCallback('incomes', items);
+      }
     });
 
+    // Listen real-time ke koleksi expenses
     listenToCloudCollection('expenses', (items) => {
-      if (onDataChangedCallback) onDataChangedCallback('expenses', items);
-    });
-
-    listenToCloudCollection('units', (items) => {
-      if (onDataChangedCallback) onDataChangedCallback('units', items);
+      console.log(`Cloud update: ${items.length} data pengeluaran diterima.`);
+      if (onDataChangedCallback) {
+        onDataChangedCallback('expenses', items);
+      }
     });
 
     return true;
   } catch (err) {
-    console.warn("Gagal inisialisasi Firebase:", err);
-    updateCloudStatusUI('error', 'Gagal Sambung Cloud (Mode Lokal)');
+    console.error("Gagal inisialisasi Firebase:", err);
+    updateCloudStatusUI('local', 'Penyimpanan Lokal (Offline)');
     isCloudSyncActive = false;
     return false;
   }
@@ -115,6 +107,8 @@ function updateCloudStatusUI(type, text) {
   
   if (type === 'cloud') {
     badge.classList.add('bg-emerald-500', 'animate-pulse');
+  } else if (type === 'connecting') {
+    badge.classList.add('bg-sky-400', 'animate-ping');
   } else if (type === 'local') {
     badge.classList.add('bg-amber-400');
   } else {
@@ -124,45 +118,53 @@ function updateCloudStatusUI(type, text) {
 
 // Subscribe real-time
 function listenToCloudCollection(collectionName, callback) {
-  if (!isCloudSyncActive || !firestoreDb || !window.firebaseModular) return;
-  const { collection, onSnapshot } = window.firebaseModular;
+  if (!isCloudSyncActive || !firestoreDb) return;
 
   try {
-    const unsub = onSnapshot(collection(firestoreDb, collectionName), (snapshot) => {
+    const unsub = firestoreDb.collection(collectionName).onSnapshot((snapshot) => {
       const items = [];
       snapshot.forEach(docSnap => {
         items.push({ id: docSnap.id, ...docSnap.data() });
       });
+
+      // Sort tanggal terbaru di atas
+      items.sort((a, b) => {
+        const dateA = a.dateTime || a.date || '';
+        const dateB = b.dateTime || b.date || '';
+        return dateB.localeCompare(dateA);
+      });
+
       callback(items);
     }, (error) => {
-      console.error(`Error listen to ${collectionName}:`, error);
+      console.warn(`Firestore listener error pada ${collectionName}:`, error.message);
     });
+
     unsubscribers.push(unsub);
   } catch (e) {
-    console.error("Error setting listener:", e);
+    console.error(`Error setting listener pada ${collectionName}:`, e);
   }
 }
 
-// Simpan dokumen ke Cloud & Local
+// Simpan dokumen ke Cloud
 async function syncSaveDocument(collectionName, id, data) {
-  if (isCloudSyncActive && firestoreDb && window.firebaseModular) {
+  if (isCloudSyncActive && firestoreDb) {
     try {
-      const { doc, setDoc } = window.firebaseModular;
-      await setDoc(doc(firestoreDb, collectionName, String(id)), data, { merge: true });
+      await firestoreDb.collection(collectionName).doc(String(id)).set(data, { merge: true });
+      console.log(`Berhasil sync ke cloud [${collectionName}]:`, id);
     } catch (e) {
-      console.error(`Gagal sync ke cloud (${collectionName}):`, e);
+      console.error(`Gagal sync ke cloud [${collectionName}]:`, e);
     }
   }
 }
 
 // Hapus dokumen di Cloud
 async function syncDeleteDocument(collectionName, id) {
-  if (isCloudSyncActive && firestoreDb && window.firebaseModular) {
+  if (isCloudSyncActive && firestoreDb) {
     try {
-      const { doc, deleteDoc } = window.firebaseModular;
-      await deleteDoc(doc(firestoreDb, collectionName, String(id)));
+      await firestoreDb.collection(collectionName).doc(String(id)).delete();
+      console.log(`Berhasil hapus di cloud [${collectionName}]:`, id);
     } catch (e) {
-      console.error(`Gagal delete di cloud (${collectionName}):`, e);
+      console.error(`Gagal hapus di cloud [${collectionName}]:`, e);
     }
   }
 }

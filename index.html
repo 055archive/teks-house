@@ -94,7 +94,16 @@
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-canvas);
+      background-color: #171211;
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(145, 107, 96, 0.28) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(20, 15, 14, 0.70) 0%, rgba(16, 12, 11, 0.85) 100%),
+        url('screenshots/apartment_bg.jpg'),
+        url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80');
+      background-size: auto, auto, cover, cover;
+      background-position: center top, center center, center center, center center;
+      background-attachment: scroll, scroll, fixed, fixed;
+      background-repeat: no-repeat;
       color: var(--text-primary);
       -webkit-tap-highlight-color: transparent;
       min-height: 100vh;
@@ -104,84 +113,176 @@
       font-family: 'Playfair Display', Georgia, serif;
     }
 
-    /* Glass Card Container */
+    /* Glass Card Container (Ultra Glassmorphism matching Glassy Dashboard V4) */
     .liquid-card {
-      background: rgba(56, 42, 40, 0.65);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-glass);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px 0 rgba(232, 216, 206, 0.08);
-      border-radius: 20px;
+      background: rgba(35, 26, 24, 0.52);
+      backdrop-filter: blur(26px) saturate(175%);
+      -webkit-backdrop-filter: blur(26px) saturate(175%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
+      border-radius: 24px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, background 0.3s ease;
     }
     html:not(.dark) .liquid-card {
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid rgba(145, 107, 96, 0.18);
-      box-shadow: 0 8px 30px rgba(96, 67, 61, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(145, 107, 96, 0.22);
+      box-shadow: 0 12px 35px rgba(96, 67, 61, 0.12), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    /* === Ultra-Smooth Spring Lift Micro-interactions (Framer Motion Physics) === */
+    .kpi-card {
+      cursor: pointer;
+      position: relative;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                  box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.35s ease,
+                  background 0.35s ease;
+      will-change: transform, box-shadow;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+    }
+    @media (hover: hover) {
+      .kpi-card:hover {
+        transform: translate3d(0, -8px, 0) scale(1.02);
+        box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.65), 
+                    0 0 35px rgba(145, 107, 96, 0.25), 
+                    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+        border-color: rgba(255, 255, 255, 0.3) !important;
+      }
+    }
+    .kpi-card:active {
+      transform: translate3d(0, -2px, 0) scale(0.985);
+      transition-duration: 0.15s;
+    }
+
+    /* Interactive Specular Glare following mouse */
+    .kpi-card::after, .unit-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.14), transparent 45%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .kpi-card:hover::after, .unit-card:hover::after {
+      opacity: 1;
+    }
+
+    /* Unit breakdown card smooth spring lift */
+    .unit-card {
+      cursor: pointer;
+      position: relative;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                  box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.35s ease;
+      will-change: transform, box-shadow;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+    }
+    @media (hover: hover) {
+      .unit-card:hover {
+        transform: translate3d(0, -6px, 0) scale(1.018);
+        box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.55), 
+                    inset 0 1px 2px rgba(255, 255, 255, 0.28);
+        border-color: rgba(255, 255, 255, 0.3) !important;
+      }
+    }
+    .unit-card:active {
+      transform: translate3d(0, -2px, 0) scale(0.985);
+      transition-duration: 0.15s;
+    }
+
+    /* Fluid Tab Gliding Animation */
+    @keyframes tabGlideIn {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 16px, 0) scale(0.99);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
     }
 
     /* Floating Navigation Island */
     .liquid-navbar {
-      background: rgba(33, 27, 26, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(193, 160, 148, 0.22);
-      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(232, 216, 206, 0.15);
+      background: rgba(28, 20, 19, 0.70);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.2);
       border-radius: 9999px;
     }
     html:not(.dark) .liquid-navbar {
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
       border: 1px solid rgba(145, 107, 96, 0.22);
       box-shadow: 0 10px 30px -10px rgba(96, 67, 61, 0.15);
     }
 
     /* Specular Primary Button */
     .btn-liquid-primary {
-      background: linear-gradient(135deg, #916B60 0%, #60433D 100%);
-      border: 1px solid rgba(232, 216, 206, 0.25);
-      box-shadow: 0 4px 15px rgba(145, 107, 96, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, rgba(145, 107, 96, 0.95) 0%, rgba(96, 67, 61, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 15px rgba(145, 107, 96, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25);
       color: #E8D8CE;
       font-weight: 700;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .btn-liquid-primary:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(145, 107, 96, 0.45);
-      background: linear-gradient(135deg, #A57D71 0%, #704E47 100%);
+      box-shadow: 0 8px 24px rgba(145, 107, 96, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, rgba(165, 125, 113, 0.95) 0%, rgba(112, 78, 71, 0.95) 100%);
     }
 
     /* Secondary Liquid Button */
     .btn-liquid-secondary {
-      background: rgba(56, 42, 40, 0.55);
-      border: 1px solid rgba(193, 160, 148, 0.2);
+      background: rgba(45, 33, 30, 0.5);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       color: var(--text-muted);
       transition: all 0.2s ease;
     }
     .btn-liquid-secondary:hover {
-      background: rgba(96, 67, 61, 0.55);
+      background: rgba(70, 50, 46, 0.65);
       color: var(--text-primary);
-      border-color: rgba(193, 160, 148, 0.4);
+      border-color: rgba(255, 255, 255, 0.28);
     }
     html:not(.dark) .btn-liquid-secondary {
-      background: rgba(230, 217, 210, 0.5);
+      background: rgba(230, 217, 210, 0.6);
       border: 1px solid rgba(145, 107, 96, 0.2);
     }
 
-    /* Custom Form Fields with Warm Mocha Glow */
+    /* Custom Form Fields with Frosted Glass */
     .liquid-input {
-      background: rgba(43, 33, 32, 0.85);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
+      background: rgba(24, 18, 17, 0.58) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      color: #FFFFFF !important;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25) !important;
       transition: all 0.2s ease;
     }
     html:not(.dark) .liquid-input {
-      background: rgba(255, 255, 255, 0.95);
-      border-color: #D6C4BC;
-      color: #2D2321;
+      background: rgba(255, 255, 255, 0.85) !important;
+      border-color: #D6C4BC !important;
+      color: #2D2321 !important;
     }
     .liquid-input:focus {
       outline: none;
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      background: rgba(35, 25, 23, 0.85) !important;
+      border-color: rgba(232, 216, 206, 0.45) !important;
+      box-shadow: 0 0 0 3px rgba(145, 107, 96, 0.35) !important;
     }
 
     /* Custom Scrollbar */
@@ -217,6 +318,7 @@
       border-radius: 50%;
       background: radial-gradient(circle, rgba(145, 107, 96, 0.22) 0%, rgba(96, 67, 61, 0.08) 50%, transparent 70%);
       filter: blur(80px);
+      animation: orbFloat1 18s ease-in-out infinite alternate;
     }
     .orb-2 {
       position: absolute;
@@ -227,6 +329,7 @@
       border-radius: 50%;
       background: radial-gradient(circle, rgba(56, 42, 40, 0.4) 0%, rgba(33, 27, 26, 0.1) 60%, transparent 80%);
       filter: blur(90px);
+      animation: orbFloat2 22s ease-in-out infinite alternate;
     }
     .orb-3 {
       position: absolute;
@@ -237,7 +340,47 @@
       border-radius: 50%;
       background: radial-gradient(circle, rgba(165, 125, 113, 0.12) 0%, transparent 70%);
       filter: blur(70px);
+      animation: orbFloat3 15s ease-in-out infinite alternate;
     }
+
+    @keyframes orbFloat1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-40px, 30px) scale(1.08); }
+    }
+    @keyframes orbFloat2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, -25px) scale(1.05); }
+    }
+    @keyframes orbFloat3 {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+      100% { transform: translate(-30px, 20px) scale(1.12); opacity: 1; }
+    }
+
+    /* === Mobile-First Responsive Improvements === */
+    @media (max-width: 640px) {
+      .kpi-card {
+        border-radius: 16px;
+      }
+      .kpi-card .kpi-value {
+        font-size: 1.5rem;
+      }
+      .liquid-card {
+        border-radius: 16px;
+      }
+    }
+
+    /* Smooth page entrance */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-entrance {
+      animation: fadeInUp 0.5s ease-out both;
+    }
+    .animate-entrance-delay-1 { animation-delay: 0.08s; }
+    .animate-entrance-delay-2 { animation-delay: 0.16s; }
+    .animate-entrance-delay-3 { animation-delay: 0.24s; }
+    .animate-entrance-delay-4 { animation-delay: 0.32s; }
 
     /* Print Stylesheet */
     @media print {
@@ -283,13 +426,13 @@
   </div>
 
   <!-- ==================== TOP HEADER ==================== -->
-  <header class="relative z-30 sticky top-0 border-b border-[#60433D]/40 bg-[#211B1A]/80 dark:bg-[#211B1A]/85 backdrop-blur-xl shadow-lg transition-colors">
+  <header class="relative z-30 sticky top-0 border-b border-white/10 bg-[#1e1514]/65 backdrop-blur-2xl shadow-xl transition-colors">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
       
       <!-- Brand & Title -->
       <div class="flex items-center space-x-3">
         <!-- Luxury Clapperboard Logo -->
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#916B60] to-[#4A342F] text-[#E8D8CE] flex items-center justify-center font-bold shadow-md shadow-[#916B60]/20 border border-[#C1A094]/30">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#916B60] to-[#4A342F] text-[#E8D8CE] flex items-center justify-center font-bold shadow-md shadow-[#916B60]/20 border border-white/20">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
           </svg>
@@ -299,7 +442,7 @@
             <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-[#E8D8CE]">
               TEKS HOUSE <span class="font-brand-italic italic text-sm sm:text-base font-normal text-[#C1A094]">Netflix &amp; Chill</span>
             </h1>
-            <span class="text-[10px] bg-[#382A28] text-[#C1A094] font-bold px-2 py-0.5 rounded-full border border-[#60433D]">Serang Kota</span>
+            <span class="text-[10px] bg-[#382A28]/80 text-[#C1A094] font-bold px-2 py-0.5 rounded-full border border-white/10">Serang Kota</span>
           </div>
           <p class="text-xs text-[#8D7269] font-medium">Buku Kas &amp; Keuangan Sewa Apartemen Per Jam</p>
         </div>
@@ -308,19 +451,19 @@
       <!-- Cloud Sync & Status Info + Dark Mode Toggle -->
       <div class="flex items-center space-x-2 sm:space-x-3">
         <!-- Cloud Sync Badge -->
-        <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-[#382A28]/80 text-[#C1A094] text-xs font-semibold border border-[#60433D]/60 shadow-xs backdrop-blur-md">
+        <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-[#2B2120]/70 text-[#C1A094] text-xs font-semibold border border-white/10 shadow-xs backdrop-blur-md">
           <span id="cloudSyncStatusBadge" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
           <span id="cloudSyncStatusText" class="hidden sm:inline">Penyimpanan Lokal (Offline)</span>
         </div>
 
         <!-- Dark Mode Toggle Button -->
-        <button id="themeToggleBtn" onclick="toggleTheme()" type="button" title="Ganti Mode Terang / Gelap" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#382A28]/80 hover:bg-[#60433D]/60 text-[#E8D8CE] border border-[#60433D]/60 transition shadow-xs">
+        <button id="themeToggleBtn" onclick="toggleTheme()" type="button" title="Ganti Mode Terang / Gelap" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#2B2120]/70 hover:bg-[#382A28] text-[#E8D8CE] border border-white/10 transition shadow-xs">
           <span id="themeIcon" class="text-sm">☀️</span>
           <span id="themeText" class="hidden sm:inline">Light Mode</span>
         </button>
 
         <!-- Quick Settings Shortcut -->
-        <button onclick="switchTab('tab-pengaturan')" class="hidden md:inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#382A28]/80 hover:bg-[#60433D]/60 text-[#C1A094] hover:text-[#E8D8CE] border border-[#60433D]/60 transition">
+        <button onclick="switchTab('tab-pengaturan')" class="hidden md:inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#2B2120]/70 hover:bg-[#382A28] text-[#C1A094] hover:text-[#E8D8CE] border border-white/10 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           <span>Pricelist &amp; Cloud</span>
         </button>
@@ -328,21 +471,21 @@
     </div>
 
     <!-- DESKTOP NAVIGATION TABS -->
-    <div class="border-t border-[#60433D]/30 hidden md:block bg-[#191413]/60 backdrop-blur-md">
+    <div class="border-t border-white/10 hidden md:block bg-[#150f0e]/50 backdrop-blur-xl">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-2 flex items-center space-x-2 overflow-x-auto">
         <button data-tab="tab-rekap" class="nav-tab-btn px-4 py-2 text-xs font-bold rounded-xl btn-liquid-primary flex items-center space-x-2 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
           <span>Rekap Keuangan</span>
         </button>
-        <button data-tab="tab-pemasukan" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28]/60 transition flex items-center space-x-2">
+        <button data-tab="tab-pemasukan" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28]/50 transition flex items-center space-x-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
           <span>Catat Customer &amp; Pemasukan</span>
         </button>
-        <button data-tab="tab-pengeluaran" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28]/60 transition flex items-center space-x-2">
+        <button data-tab="tab-pengeluaran" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28]/50 transition flex items-center space-x-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
           <span>Catat Pengeluaran</span>
         </button>
-        <button data-tab="tab-pengaturan" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28]/60 transition flex items-center space-x-2">
+        <button data-tab="tab-pengaturan" class="nav-tab-btn px-4 py-2 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28]/50 transition flex items-center space-x-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           <span>Pricelist &amp; Cloud</span>
         </button>
@@ -359,25 +502,25 @@
     <section id="tab-rekap" class="space-y-6">
       
       <!-- FILTER PERIODE BAR -->
-      <div class="liquid-card p-5 sm:p-6 border border-[#60433D]/60">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="liquid-card p-4 sm:p-5 md:p-6 border border-[#60433D]/60 animate-entrance">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <div class="text-[11px] font-bold uppercase tracking-wider text-[#8D7269]">Periode Rekapitulasi</div>
-            <h2 id="recapPeriodTitle" class="text-xl sm:text-2xl font-black text-[#E8D8CE] mt-0.5 tracking-tight">Memuat Data...</h2>
+            <div class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#8D7269]">Periode Rekapitulasi</div>
+            <h2 id="recapPeriodTitle" class="text-lg sm:text-xl md:text-2xl font-black text-[#E8D8CE] mt-0.5 tracking-tight">Memuat Data...</h2>
           </div>
 
           <!-- Pilihan Jenis Filter -->
-          <div class="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#2B2120]/80 rounded-2xl border border-[#60433D]/60">
-            <button data-filter="daily" class="filter-type-btn px-3.5 py-1.5 text-xs font-bold rounded-xl btn-liquid-primary shadow-xs transition">
+          <div class="flex flex-wrap items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 bg-[#2B2120]/80 rounded-xl sm:rounded-2xl border border-[#60433D]/60">
+            <button data-filter="daily" class="filter-type-btn px-2.5 sm:px-3.5 py-1.5 text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl btn-liquid-primary shadow-xs transition">
               📅 Harian
             </button>
-            <button data-filter="weekly" class="filter-type-btn px-3.5 py-1.5 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28] transition">
+            <button data-filter="weekly" class="filter-type-btn px-2.5 sm:px-3.5 py-1.5 text-[10px] sm:text-xs font-semibold rounded-lg sm:rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28] transition">
               📊 7 Hari
             </button>
-            <button data-filter="monthly" class="filter-type-btn px-3.5 py-1.5 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28] transition">
+            <button data-filter="monthly" class="filter-type-btn px-2.5 sm:px-3.5 py-1.5 text-[10px] sm:text-xs font-semibold rounded-lg sm:rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28] transition">
               🗓️ Bulanan
             </button>
-            <button data-filter="custom" class="filter-type-btn px-3.5 py-1.5 text-xs font-semibold rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28] transition">
+            <button data-filter="custom" class="filter-type-btn px-2.5 sm:px-3.5 py-1.5 text-[10px] sm:text-xs font-semibold rounded-lg sm:rounded-xl text-[#C1A094] hover:text-[#E8D8CE] hover:bg-[#382A28] transition">
               ⚙️ Kustom
             </button>
           </div>
@@ -416,143 +559,157 @@
 
           <!-- Tombol Ekspor & Cetak -->
           <div class="flex items-center space-x-2 ml-auto">
-            <button onclick="exportToExcelCSV()" class="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 border border-emerald-500/30 transition flex items-center space-x-1.5 shadow-xs">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-              <span>Export CSV</span>
+            <button onclick="exportToExcelCSV()" class="px-2.5 sm:px-3.5 py-1.5 text-[10px] sm:text-xs font-bold rounded-xl bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 border border-emerald-500/30 transition flex items-center space-x-1 sm:space-x-1.5 shadow-xs">
+              <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              <span class="hidden sm:inline">Export CSV</span>
+              <span class="sm:hidden">CSV</span>
             </button>
-            <button onclick="printReport()" class="btn-liquid-secondary px-3.5 py-1.5 text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-xs">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-              <span>Cetak / PDF</span>
+            <button onclick="printReport()" class="btn-liquid-secondary px-2.5 sm:px-3.5 py-1.5 text-[10px] sm:text-xs font-bold rounded-xl transition flex items-center space-x-1 sm:space-x-1.5 shadow-xs">
+              <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+              <span class="hidden sm:inline">Cetak / PDF</span>
+              <span class="sm:hidden">Print</span>
             </button>
           </div>
         </div>
       </div>
 
       <!-- 4 KARTU STATISTIK UTAMA (KPI) -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         
         <!-- 1. Customer Masuk -->
-        <div class="liquid-card p-5 border border-[#60433D]/60 relative overflow-hidden group">
+        <div class="liquid-card kpi-card p-4 sm:p-5 border border-[#60433D]/60 relative overflow-hidden group animate-entrance">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-[#C1A094]">Customer Masuk</span>
-            <div class="w-8 h-8 rounded-xl bg-[#916B60]/20 text-[#E8D8CE] flex items-center justify-center font-bold border border-[#916B60]/30">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#C1A094]">Customer Masuk</span>
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#916B60]/20 text-[#E8D8CE] flex items-center justify-center font-bold border border-[#916B60]/30 text-sm sm:text-base">
               👥
             </div>
           </div>
-          <div id="statTotalCustomers" class="text-2xl sm:text-3xl font-black text-[#E8D8CE] mt-2 tracking-tight">0 Orang</div>
-          <div class="text-xs text-[#8D7269] mt-1 flex items-center space-x-1">
+          <div id="statTotalCustomers" class="kpi-value text-xl sm:text-2xl md:text-3xl font-black text-[#E8D8CE] mt-1.5 sm:mt-2 tracking-tight">0 Orang</div>
+          <div class="text-[10px] sm:text-xs text-[#8D7269] mt-1 flex items-center space-x-1">
             <span>⏱️ Total Jam:</span>
             <span id="statTotalHours" class="font-bold text-[#C1A094]">0 Jam</span>
           </div>
         </div>
 
         <!-- 2. Total Pemasukan -->
-        <div class="liquid-card p-5 border border-emerald-500/30 bg-gradient-to-br from-[#382A28]/80 to-emerald-950/20 relative overflow-hidden">
+        <div class="liquid-card kpi-card p-4 sm:p-5 border border-emerald-500/30 bg-gradient-to-br from-[#382A28]/80 to-emerald-950/20 relative overflow-hidden animate-entrance animate-entrance-delay-1">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Total Pemasukan</span>
-            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/30">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-400">Total Pemasukan</span>
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/30 text-sm sm:text-base">
               💰
             </div>
           </div>
-          <div id="statTotalIncome" class="text-2xl sm:text-3xl font-black text-emerald-400 mt-2 tracking-tight">Rp 0</div>
-          <div class="text-[11px] text-emerald-500/80 mt-1 truncate font-medium">
-            Tarif resmi TEKS HOUSE
+          <div id="statTotalIncome" class="kpi-value text-xl sm:text-2xl md:text-3xl font-black text-emerald-400 mt-1.5 sm:mt-2 tracking-tight">Rp 0</div>
+          <div class="flex items-center justify-between mt-1 gap-1">
+            <div class="text-[10px] sm:text-[11px] text-emerald-500/80 truncate font-medium">
+              Tarif resmi TEKS HOUSE
+            </div>
+            <span class="inline-flex items-center gap-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+              <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7m0 0H7m10 0v10"></path></svg>
+              <span>Kas Masuk</span>
+            </span>
           </div>
         </div>
 
         <!-- 3. Total Pengeluaran -->
-        <div class="liquid-card p-5 border border-rose-500/30 bg-gradient-to-br from-[#382A28]/80 to-rose-950/20 relative overflow-hidden">
+        <div class="liquid-card kpi-card p-4 sm:p-5 border border-rose-500/30 bg-gradient-to-br from-[#382A28]/80 to-rose-950/20 relative overflow-hidden animate-entrance animate-entrance-delay-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Total Pengeluaran</span>
-            <div class="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold border border-rose-500/30">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-rose-400">Total Pengeluaran</span>
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold border border-rose-500/30 text-sm sm:text-base">
               📉
             </div>
           </div>
-          <div id="statTotalExpense" class="text-2xl sm:text-3xl font-black text-rose-400 mt-2 tracking-tight">Rp 0</div>
-          <div class="text-[11px] text-rose-400/80 mt-1 truncate">
+          <div id="statTotalExpense" class="kpi-value text-xl sm:text-2xl md:text-3xl font-black text-rose-400 mt-1.5 sm:mt-2 tracking-tight">Rp 0</div>
+          <div class="text-[10px] sm:text-[11px] text-rose-400/80 mt-1 truncate">
             Biaya operasional &amp; unit
           </div>
         </div>
 
         <!-- 4. Laba Bersih (Net Profit) -->
-        <div class="liquid-card p-5 border border-[#916B60]/40 bg-gradient-to-br from-[#382A28]/80 to-[#916B60]/15 relative overflow-hidden">
+        <div class="liquid-card kpi-card p-4 sm:p-5 border border-[#916B60]/40 bg-gradient-to-br from-[#382A28]/80 to-[#916B60]/15 relative overflow-hidden animate-entrance animate-entrance-delay-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-[#C1A094]">Laba Bersih</span>
-            <div class="w-8 h-8 rounded-xl bg-[#916B60]/20 text-[#E8D8CE] flex items-center justify-center font-bold border border-[#916B60]/30">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#C1A094]">Laba Bersih</span>
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#916B60]/20 text-[#E8D8CE] flex items-center justify-center font-bold border border-[#916B60]/30 text-sm sm:text-base">
               📈
             </div>
           </div>
-          <div id="statNetProfit" class="text-2xl sm:text-3xl font-black text-[#E8D8CE] mt-2 tracking-tight">Rp 0</div>
-          <div class="text-[11px] text-[#8D7269] mt-1">
-            Pemasukan dikurangi Pengeluaran
+          <div id="statNetProfit" class="kpi-value text-xl sm:text-2xl md:text-3xl font-black text-[#E8D8CE] mt-1.5 sm:mt-2 tracking-tight">Rp 0</div>
+          <div class="flex items-center justify-between mt-1 gap-1">
+            <div class="text-[10px] sm:text-[11px] text-[#8D7269] truncate">
+              Pemasukan - Pengeluaran
+            </div>
+            <span id="statNetProfitBadge" class="inline-flex items-center gap-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+              <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7m0 0H7m10 0v10"></path></svg>
+              <span>Net Profit</span>
+            </span>
           </div>
         </div>
       </div>
 
       <!-- 3 KARTU BREAKDOWN PER UNIT -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         
         <!-- Unit B-24 (VIP) -->
-        <div class="liquid-card p-4.5 border border-amber-500/30 bg-gradient-to-r from-[#382A28]/80 to-amber-950/15 flex items-center justify-between">
+        <div class="liquid-card unit-card p-3.5 sm:p-4.5 border border-amber-500/30 bg-gradient-to-r from-[#382A28]/80 to-amber-950/15 flex items-center justify-between animate-entrance animate-entrance-delay-1">
           <div>
             <div class="flex items-center space-x-2">
-              <span class="font-extrabold text-[#E8D8CE] text-sm">Unit B-24</span>
-              <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">VIP</span>
+              <span class="font-extrabold text-[#E8D8CE] text-xs sm:text-sm">Unit B-24</span>
+              <span class="text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">VIP</span>
             </div>
-            <p id="breakdownB24" class="text-xs text-[#C1A094] mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
+            <p id="breakdownB24" class="text-[10px] sm:text-xs text-[#C1A094] mt-0.5 sm:mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
           </div>
-          <div class="text-xl">✨</div>
+          <div class="text-lg sm:text-xl">✨</div>
         </div>
 
         <!-- Unit B-32 (REGULER) -->
-        <div class="liquid-card p-4.5 border border-sky-500/30 bg-gradient-to-r from-[#382A28]/80 to-sky-950/15 flex items-center justify-between">
+        <div class="liquid-card unit-card p-3.5 sm:p-4.5 border border-sky-500/30 bg-gradient-to-r from-[#382A28]/80 to-sky-950/15 flex items-center justify-between animate-entrance animate-entrance-delay-2">
           <div>
             <div class="flex items-center space-x-2">
-              <span class="font-extrabold text-[#E8D8CE] text-sm">Unit B-32</span>
-              <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">REGULER</span>
+              <span class="font-extrabold text-[#E8D8CE] text-xs sm:text-sm">Unit B-32</span>
+              <span class="text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">REGULER</span>
             </div>
-            <p id="breakdownB32" class="text-xs text-[#C1A094] mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
+            <p id="breakdownB32" class="text-[10px] sm:text-xs text-[#C1A094] mt-0.5 sm:mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
           </div>
-          <div class="text-xl">🛋️</div>
+          <div class="text-lg sm:text-xl">🛋️</div>
         </div>
 
         <!-- Unit C-34 (REGULER) -->
-        <div class="liquid-card p-4.5 border border-sky-500/30 bg-gradient-to-r from-[#382A28]/80 to-sky-950/15 flex items-center justify-between">
+        <div class="liquid-card unit-card p-3.5 sm:p-4.5 border border-sky-500/30 bg-gradient-to-r from-[#382A28]/80 to-sky-950/15 flex items-center justify-between animate-entrance animate-entrance-delay-3">
           <div>
             <div class="flex items-center space-x-2">
-              <span class="font-extrabold text-[#E8D8CE] text-sm">Unit C-34</span>
-              <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">REGULER</span>
+              <span class="font-extrabold text-[#E8D8CE] text-xs sm:text-sm">Unit C-34</span>
+              <span class="text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">REGULER</span>
             </div>
-            <p id="breakdownC34" class="text-xs text-[#C1A094] mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
+            <p id="breakdownC34" class="text-[10px] sm:text-xs text-[#C1A094] mt-0.5 sm:mt-1 font-medium">0 Cust (0 Jam) • Rp 0</p>
           </div>
-          <div class="text-xl">🛏️</div>
+          <div class="text-lg sm:text-xl">🛏️</div>
         </div>
       </div>
 
       <!-- TABEL 1: DATA CUSTOMER & PEMASUKAN -->
-      <div class="liquid-card border border-[#60433D]/60 overflow-hidden shadow-xl">
-        <div class="px-5 py-4 border-b border-[#60433D]/40 flex items-center justify-between bg-[#2B2120]/40">
-          <div class="flex items-center space-x-2">
-            <h3 class="text-sm font-extrabold text-[#E8D8CE] tracking-tight">Data Customer Masuk &amp; Pemasukan</h3>
-            <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">Uang Masuk</span>
+      <div class="liquid-card border border-[#60433D]/60 overflow-hidden shadow-xl animate-entrance animate-entrance-delay-4">
+        <div class="px-4 sm:px-5 py-3 sm:py-4 border-b border-[#60433D]/40 flex items-center justify-between bg-[#2B2120]/40">
+          <div class="flex items-center space-x-2 min-w-0">
+            <h3 class="text-xs sm:text-sm font-extrabold text-[#E8D8CE] tracking-tight truncate">Data Customer &amp; Pemasukan</h3>
+            <span class="text-[9px] sm:text-[10px] bg-emerald-500/15 text-emerald-400 px-1.5 sm:px-2 py-0.5 rounded-full font-bold border border-emerald-500/30 shrink-0">Masuk</span>
           </div>
-          <button onclick="switchTab('tab-pemasukan')" class="text-xs font-bold text-[#E8D8CE] hover:text-[#C1A094] bg-[#916B60]/30 hover:bg-[#916B60]/50 border border-[#916B60]/40 px-3 py-1.5 rounded-xl transition flex items-center space-x-1">
-            <span>+ Catat Baru</span>
+          <button onclick="switchTab('tab-pemasukan')" class="text-[10px] sm:text-xs font-bold text-[#E8D8CE] hover:text-[#C1A094] bg-[#916B60]/30 hover:bg-[#916B60]/50 border border-[#916B60]/40 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl transition flex items-center space-x-1 shrink-0">
+            <span>+ Catat</span>
           </button>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
+        <div class="overflow-x-auto -webkit-overflow-scrolling-touch">
+          <table class="w-full text-left border-collapse text-[10px] sm:text-xs">
             <thead>
               <tr class="bg-[#2B2120]/70 text-[#C1A094] uppercase font-bold tracking-wider border-b border-[#60433D]/40">
-                <th class="py-3 px-4">No</th>
-                <th class="py-3 px-4">Waktu Masuk</th>
-                <th class="py-3 px-4">Unit</th>
-                <th class="py-3 px-4">Paket / Durasi</th>
-                <th class="py-3 px-4">Total Pemasukan</th>
-                <th class="py-3 px-4">Metode Bayar</th>
-                <th class="py-3 px-4">Catatan</th>
-                <th class="py-3 px-4 text-right">Aksi</th>
+                <th class="py-2.5 px-3 sm:px-4">No</th>
+                <th class="py-2.5 px-3 sm:px-4">Waktu Masuk</th>
+                <th class="py-2.5 px-3 sm:px-4">Unit</th>
+                <th class="py-2.5 px-3 sm:px-4">Paket / Durasi</th>
+                <th class="py-2.5 px-3 sm:px-4">Pemasukan</th>
+                <th class="py-2.5 px-3 sm:px-4">Bayar</th>
+                <th class="py-2.5 px-3 sm:px-4">Catatan</th>
+                <th class="py-2.5 px-3 sm:px-4 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody id="tableIncomesBody" class="divide-y divide-[#60433D]/30 font-medium">
@@ -568,28 +725,28 @@
       </div>
 
       <!-- TABEL 2: DATA PENGELUARAN -->
-      <div class="liquid-card border border-[#60433D]/60 overflow-hidden shadow-xl">
-        <div class="px-5 py-4 border-b border-[#60433D]/40 flex items-center justify-between bg-[#2B2120]/40">
-          <div class="flex items-center space-x-2">
-            <h3 class="text-sm font-extrabold text-[#E8D8CE] tracking-tight">Data Pengeluaran Operasional</h3>
-            <span class="text-[10px] bg-rose-500/15 text-rose-400 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">Uang Keluar</span>
+      <div class="liquid-card border border-[#60433D]/60 overflow-hidden shadow-xl animate-entrance animate-entrance-delay-4">
+        <div class="px-4 sm:px-5 py-3 sm:py-4 border-b border-[#60433D]/40 flex items-center justify-between bg-[#2B2120]/40">
+          <div class="flex items-center space-x-2 min-w-0">
+            <h3 class="text-xs sm:text-sm font-extrabold text-[#E8D8CE] tracking-tight truncate">Data Pengeluaran Operasional</h3>
+            <span class="text-[9px] sm:text-[10px] bg-rose-500/15 text-rose-400 px-1.5 sm:px-2 py-0.5 rounded-full font-bold border border-rose-500/30 shrink-0">Keluar</span>
           </div>
-          <button onclick="switchTab('tab-pengeluaran')" class="text-xs font-bold text-[#E8D8CE] hover:text-[#C1A094] bg-[#916B60]/30 hover:bg-[#916B60]/50 border border-[#916B60]/40 px-3 py-1.5 rounded-xl transition flex items-center space-x-1">
-            <span>+ Catat Pengeluaran</span>
+          <button onclick="switchTab('tab-pengeluaran')" class="text-[10px] sm:text-xs font-bold text-[#E8D8CE] hover:text-[#C1A094] bg-[#916B60]/30 hover:bg-[#916B60]/50 border border-[#916B60]/40 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl transition flex items-center space-x-1 shrink-0">
+            <span>+ Catat</span>
           </button>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
+        <div class="overflow-x-auto -webkit-overflow-scrolling-touch">
+          <table class="w-full text-left border-collapse text-[10px] sm:text-xs">
             <thead>
               <tr class="bg-[#2B2120]/70 text-[#C1A094] uppercase font-bold tracking-wider border-b border-[#60433D]/40">
-                <th class="py-3 px-4">No</th>
-                <th class="py-3 px-4">Tanggal</th>
-                <th class="py-3 px-4">Kategori</th>
-                <th class="py-3 px-4">Unit</th>
-                <th class="py-3 px-4">Nominal</th>
-                <th class="py-3 px-4">Catatan</th>
-                <th class="py-3 px-4 text-right">Aksi</th>
+                <th class="py-2.5 px-3 sm:px-4">No</th>
+                <th class="py-2.5 px-3 sm:px-4">Tanggal</th>
+                <th class="py-2.5 px-3 sm:px-4">Kategori</th>
+                <th class="py-2.5 px-3 sm:px-4">Unit</th>
+                <th class="py-2.5 px-3 sm:px-4">Nominal</th>
+                <th class="py-2.5 px-3 sm:px-4">Catatan</th>
+                <th class="py-2.5 px-3 sm:px-4 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody id="tableExpensesBody" class="divide-y divide-[#60433D]/30 font-medium">
@@ -665,15 +822,15 @@
           <div>
             <label class="block text-xs font-bold text-[#E8D8CE] uppercase tracking-wider mb-2">Pilih Paket Durasi Sewa</label>
             
-            <div class="grid grid-cols-4 gap-2 mb-2.5">
-              <button type="button" data-pkg="1" onclick="setPackageSelection('1')" class="pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl btn-liquid-secondary transition">1 Jam</button>
-              <button type="button" data-pkg="2" onclick="setPackageSelection('2')" class="pkg-btn py-2.5 px-2 text-xs font-extrabold rounded-xl btn-liquid-primary transition">2 Jam</button>
-              <button type="button" data-pkg="3" onclick="setPackageSelection('3')" class="pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl btn-liquid-secondary transition">3 Jam</button>
-              <button type="button" data-pkg="4" onclick="setPackageSelection('4')" class="pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl btn-liquid-secondary transition">4 Jam</button>
-              <button type="button" data-pkg="5" onclick="setPackageSelection('5')" class="pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl btn-liquid-secondary transition">5 Jam</button>
-              <button type="button" data-pkg="6" onclick="setPackageSelection('6')" class="pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl btn-liquid-secondary transition">6 Jam</button>
-              <button type="button" data-pkg="12" onclick="setPackageSelection('12')" class="pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl btn-liquid-secondary transition">12 Jam</button>
-              <button type="button" data-pkg="malam" onclick="setPackageSelection('malam')" class="pkg-btn py-2.5 px-2 text-xs font-extrabold rounded-xl bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border border-amber-500/40 transition">🌙 Malam</button>
+            <div class="grid grid-cols-4 gap-1.5 sm:gap-2 mb-2.5">
+              <button type="button" data-pkg="1" onclick="setPackageSelection('1')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl btn-liquid-secondary transition">1 Jam</button>
+              <button type="button" data-pkg="2" onclick="setPackageSelection('2')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-extrabold rounded-xl btn-liquid-primary transition">2 Jam</button>
+              <button type="button" data-pkg="3" onclick="setPackageSelection('3')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl btn-liquid-secondary transition">3 Jam</button>
+              <button type="button" data-pkg="4" onclick="setPackageSelection('4')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl btn-liquid-secondary transition">4 Jam</button>
+              <button type="button" data-pkg="5" onclick="setPackageSelection('5')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl btn-liquid-secondary transition">5 Jam</button>
+              <button type="button" data-pkg="6" onclick="setPackageSelection('6')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl btn-liquid-secondary transition">6 Jam</button>
+              <button type="button" data-pkg="12" onclick="setPackageSelection('12')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl btn-liquid-secondary transition">12 Jam</button>
+              <button type="button" data-pkg="malam" onclick="setPackageSelection('malam')" class="pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-extrabold rounded-xl bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border border-amber-500/40 transition">🌙 Malam</button>
             </div>
 
             <div class="flex items-center space-x-2 text-xs text-[#C1A094]">
@@ -960,7 +1117,7 @@
   </main>
 
   <!-- ==================== MOBILE FLOATING BOTTOM NAV ==================== -->
-  <nav id="bottomNav" class="md:hidden fixed bottom-4 left-4 right-4 max-w-md mx-auto liquid-navbar py-2 px-3 z-40 flex items-center justify-around shadow-2xl">
+  <nav id="bottomNav" class="md:hidden fixed bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 max-w-md mx-auto liquid-navbar py-2 px-2.5 sm:px-3 z-40 flex items-center justify-around shadow-2xl pb-[max(0.5rem,env(safe-area-inset-bottom))]">
     <button data-tab="tab-rekap" class="mobile-nav-btn flex flex-col items-center px-3 py-1.5 rounded-xl text-[#E8D8CE] bg-[#916B60]/30 transition">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
       <span class="text-[10px] font-bold mt-0.5">Rekap</span>
@@ -1464,7 +1621,12 @@ function switchTab(tabId) {
   });
 
   const activeTabEl = document.getElementById(tabId);
-  if (activeTabEl) activeTabEl.classList.remove('hidden');
+  if (activeTabEl) {
+    activeTabEl.classList.remove('hidden');
+    activeTabEl.style.animation = 'none';
+    activeTabEl.offsetHeight; // trigger reflow
+    activeTabEl.style.animation = 'tabGlideIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+  }
 
   // Update styling tombol tab desktop
   document.querySelectorAll('.nav-tab-btn').forEach(btn => {
@@ -1556,15 +1718,15 @@ function setPackageSelection(pkg) {
   document.querySelectorAll('.pkg-btn').forEach(btn => {
     if (btn.dataset.pkg === String(pkg)) {
       if (pkg === 'malam') {
-        btn.className = 'pkg-btn py-2.5 px-2 text-xs font-black rounded-xl bg-amber-500/30 text-amber-300 border border-amber-400/60 shadow-md transition';
+        btn.className = 'pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-black rounded-xl bg-amber-500/30 text-amber-300 border border-amber-400/60 shadow-md transition';
       } else {
-        btn.className = 'pkg-btn py-2.5 px-2 text-xs font-black rounded-xl btn-liquid-primary transition';
+        btn.className = 'pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-black rounded-xl btn-liquid-primary transition';
       }
     } else {
       if (btn.dataset.pkg === 'malam') {
-        btn.className = 'pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border border-amber-500/40 transition';
+        btn.className = 'pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border border-amber-500/40 transition';
       } else {
-        btn.className = 'pkg-btn py-2.5 px-2 text-xs font-bold rounded-xl btn-liquid-secondary transition';
+        btn.className = 'pkg-btn py-2 sm:py-2.5 px-1 sm:px-2 text-[11px] sm:text-xs font-bold rounded-xl btn-liquid-secondary transition';
       }
     }
   });
@@ -1687,6 +1849,44 @@ function setupEventListeners() {
 
   // Filter Rekapitulasi
   setupFilterListeners();
+
+  // Interactive Glass Spotlight Glare
+  document.querySelectorAll('.kpi-card, .unit-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+}
+
+// Smooth Number Counter Transition (Framer Motion feel)
+function animateCounter(elementId, targetValue, formatFn, duration = 450) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const prevVal = el._currentValue || 0;
+  el._currentValue = targetValue;
+  if (prevVal === targetValue) {
+    el.innerText = formatFn ? formatFn(targetValue) : targetValue;
+    return;
+  }
+  const startTime = performance.now();
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Easing: cubic-bezier(0.16, 1, 0.3, 1) -> 1 - Math.pow(1 - progress, 3)
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(prevVal + (targetValue - prevVal) * eased);
+    el.innerText = formatFn ? formatFn(current) : current;
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.innerText = formatFn ? formatFn(targetValue) : targetValue;
+    }
+  }
+  requestAnimationFrame(step);
 }
 
 function setupFilterListeners() {
@@ -1985,22 +2185,31 @@ function renderRecap() {
 
   const netProfit = totalIncome - totalExpense;
 
-  // Tampilkan ke Elemen DOM
+  // Tampilkan ke Elemen DOM dengan Animasi Halus
   const periodLabelEl = document.getElementById('recapPeriodTitle');
   if (periodLabelEl) periodLabelEl.innerText = periodLabel;
 
-  document.getElementById('statTotalCustomers').innerText = `${totalCustomers} Orang`;
-  document.getElementById('statTotalHours').innerText = `${totalHours} Jam`;
-  document.getElementById('statTotalIncome').innerText = formatRupiah(totalIncome);
-  document.getElementById('statTotalExpense').innerText = formatRupiah(totalExpense);
+  animateCounter('statTotalCustomers', totalCustomers, val => `${val} Orang`, 400);
+  animateCounter('statTotalHours', totalHours, val => `${val} Jam`, 400);
+  animateCounter('statTotalIncome', totalIncome, formatRupiah, 450);
+  animateCounter('statTotalExpense', totalExpense, formatRupiah, 450);
+  animateCounter('statNetProfit', netProfit, formatRupiah, 450);
 
   const profitEl = document.getElementById('statNetProfit');
+  const profitBadge = document.getElementById('statNetProfitBadge');
   if (profitEl) {
-    profitEl.innerText = formatRupiah(netProfit);
     if (netProfit >= 0) {
-      profitEl.className = 'text-2xl sm:text-3xl font-black text-emerald-400 mt-2 tracking-tight';
+      profitEl.className = 'kpi-value text-xl sm:text-2xl md:text-3xl font-black text-emerald-400 mt-1.5 sm:mt-2 tracking-tight';
+      if (profitBadge) {
+        profitBadge.className = 'inline-flex items-center gap-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20 shrink-0';
+        profitBadge.innerHTML = `<svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7m0 0H7m10 0v10"></path></svg><span>Surplus</span>`;
+      }
     } else {
-      profitEl.className = 'text-2xl sm:text-3xl font-black text-rose-400 mt-2 tracking-tight';
+      profitEl.className = 'kpi-value text-xl sm:text-2xl md:text-3xl font-black text-rose-400 mt-1.5 sm:mt-2 tracking-tight';
+      if (profitBadge) {
+        profitBadge.className = 'inline-flex items-center gap-0.5 text-[9px] sm:text-[10px] font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-md border border-rose-500/20 shrink-0';
+        profitBadge.innerHTML = `<svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 7L7 17m0 0h10M7 17V7"></path></svg><span>Defisit</span>`;
+      }
     }
   }
 
